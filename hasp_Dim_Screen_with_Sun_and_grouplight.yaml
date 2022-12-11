@@ -64,7 +64,9 @@ blueprint:
       name: "Group of lights to monitor"
       description: "Group of lights to monitor for activity. If the group is on, the automation is skipped"
       selector:
-        group:
+        entity:
+          domain:
+            - group
 
 mode: parallel
 max_exceeded: silent
