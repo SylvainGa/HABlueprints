@@ -1,0 +1,83 @@
+blueprint:
+  name: "HASPone Show the screen when a group of light is on"
+  description: |
+
+    ## Blueprint Version: `1.05.00`
+
+    # Description
+
+    When any light in a group of light is on, the screen is shown at a specific brightness level.
+
+  domain: automation
+  input:
+    haspdevice:
+      name: "HASPone Device"
+      description: "Select the HASPone device"
+      selector:
+        device:
+          integration: mqtt
+          manufacturer: "HASwitchPlate"
+          model: "HASPone v1.0.0"
+    brightvalue:
+      name: "Brightness to set when grouplight is on"
+      description: "Select the brightness value to become when a light in a group of light is on."
+      default: 100
+      selector:
+        number:
+          min: 1
+          max: 100
+          mode: slider
+          unit_of_measurement: percent
+    lightgroup:
+      name: "Group of lights to monitor"
+      description: "Group of lights to monitor for activity. If the group is on, this automation is triggered"
+      selector:
+        entity:
+          domain:
+            - group
+
+mode: parallel
+max_exceeded: silent
+
+variables:
+  haspdevice: !input haspdevice
+  haspname: >-
+    {%- for entity in device_entities(haspdevice) -%}
+      {%- if entity|regex_search("^sensor\..+_sensor(?:_\d+|)$") -%}
+        {{- entity|regex_replace(find="^sensor\.", replace="", ignorecase=true)|regex_replace(find="_sensor(?:_\d+|)$", replace="", ignorecase=true) -}}
+      {%- endif -%}
+    {%- endfor -%}
+  brightvalue: !input brightvalue
+  lightcommandtopic: '{{ "hasp/" ~ haspname ~ "/brightness/set" }}'
+  lightgroup: !input lightgroup
+
+trigger_variables:
+  haspdevice: !input haspdevice
+  haspname: >-
+    {%- for entity in device_entities(haspdevice) -%}
+      {%- if entity|regex_search("^sensor\..+_sensor(?:_\d+|)$") -%}
+        {{- entity|regex_replace(find="^sensor\.", replace="", ignorecase=true)|regex_replace(find="_sensor(?:_\d+|)$", replace="", ignorecase=true) -}}
+      {%- endif -%}
+    {%- endfor -%}
+  haspsensor: >-
+    {%- for entity in device_entities(haspdevice) -%}
+      {%- if entity|regex_search("^sensor\..+_sensor(?:_\d+|)$") -%}
+        {{ entity }}
+      {%- endif -%}
+    {%- endfor -%}
+
+trigger:
+  - platform: state
+    entity_id:
+      - lightgroup
+    to: "on"
+
+condition:
+  - condition: template
+    value_template: "{{ is_state(haspsensor, 'ON') }}"
+
+action:
+  - service: mqtt.publish
+    data:
+      topic: "{{lightcommandtopic}}"
+      payload: "{{brightvalue}}"
