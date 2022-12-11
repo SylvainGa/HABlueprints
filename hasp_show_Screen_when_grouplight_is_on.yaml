@@ -68,8 +68,7 @@ trigger_variables:
 
 trigger:
   - platform: state
-    entity_id:
-      - lightgroup
+    entity_id: lightgroup
     to: "on"
 
 condition:
