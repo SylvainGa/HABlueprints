@@ -103,10 +103,6 @@ condition:
   - condition: template
     value_template: "{{ is_state(haspsensor, 'ON') }}"
   - condition: template
-    value_template: "{{ state_attr('sun.sun', 'elevation') | round(default=90) >= elevationday }}"
-  - condition: template
-    value_template: "{{ state_attr('sun.sun', 'elevation') | round(default=-90) <= elevationnight }}"
-  - condition: template
     value_template: "{{ is_state(lightgroup, 'off') }}"
 
 action:
