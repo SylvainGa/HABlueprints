@@ -102,8 +102,9 @@ trigger:
 condition:
   - condition: template
     value_template: "{{ is_state(haspsensor, 'ON') }}"
-  - condition: template
-    value_template: "{{ is_state(lightgroup, 'off') }}"
+  - condition: state
+    entity_id: !input lightgroup
+    state: "off"
 
 action:
   - choose:
