@@ -113,7 +113,13 @@ action:
       payload: "{{brightvalue}}"
   - delay:
       seconds: "{{idletime|int}}"
-  - service: mqtt.publish
-    data:
-      topic: "{{lightcommandtopic}}"
-      payload: "{{darkvalue}}"
+  -choose:
+      - conditions:
+        - condition: state
+          entity_id: !input lightgroup
+          state: "off"
+        sequence:
+          - service: mqtt.publish
+            data:
+              topic: "{{lightcommandtopic}}"
+              payload: "{{darkvalue}}"
