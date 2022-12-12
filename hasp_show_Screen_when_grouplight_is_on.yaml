@@ -49,7 +49,6 @@ variables:
     {%- endfor -%}
   brightvalue: !input brightvalue
   lightcommandtopic: '{{ "hasp/" ~ haspname ~ "/brightness/set" }}'
-  lightgroup: !input lightgroup
 
 trigger_variables:
   haspdevice: !input haspdevice

@@ -90,14 +90,13 @@ variables:
   elevationday: !input elevationday
   elevationnight: !input elevationnight
   lightcommandtopic: "{{ 'hasp/' ~ haspname ~ '/brightness/set' }}"
-  lightgroup: !input lightgroup
     
 trigger:
   - platform: state
     entity_id: sun.sun
     attribute: elevation
   - platform: state
-    entity_id: lightgroup
+    entity_id: !input lightgroup
     to: "off"
 
 condition:
