@@ -89,6 +89,7 @@ variables:
   brightnight: !input brightnight
   elevationday: !input elevationday
   elevationnight: !input elevationnight
+  lightgroup: !input lightgroup
   lightcommandtopic: "{{ 'hasp/' ~ haspname ~ '/brightness/set' }}"
 
 trigger:
@@ -105,10 +106,12 @@ condition:
   - condition: state
     entity_id: !input lightgroup
     state: 'off'
-#  - condition: template
-#    value_template: "{{ state_attr('sun.sun', 'elevation') | round(default=90) <= elevationday }}"
-#  - condition: template
-#    value_template: "{{ state_attr('sun.sun', 'elevation') | round(default=-90) >= elevationnight }}"
+  - condition: template
+    value_template: "{{ state_attr('sun.sun', 'elevation') | round(default=90) <= elevationday }}"
+  - condition: template
+    value_template: |
+      {{ state_attr('sun.sun', 'elevation') | round(default=-90) >= elevationnight 
+      or trigger.entity_id == lightgroup }}
 
 action:
   - choose:
