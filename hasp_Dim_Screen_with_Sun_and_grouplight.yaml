@@ -2,7 +2,7 @@ blueprint:
   name: "HASPone dims the backlight with the sun when lightgroup is off"
   description: |
 
-    ## Blueprint Version: `1.05.00`
+    ## Blueprint Version: `1.06.00`
 
     # Description
 
@@ -62,11 +62,11 @@ blueprint:
           unit_of_measurement: "°"
     lightgroup:
       name: "Group of lights to monitor"
-      description: "Group of lights to monitor for activity. If the group is on, the automation is skipped"
+      description: "Group of lights to monitor for activity. If the group is on, the automation is skipped."
       selector:
         entity:
           domain:
-            - group
+          - group
 
 mode: parallel
 max_exceeded: silent
@@ -90,21 +90,25 @@ variables:
   elevationday: !input elevationday
   elevationnight: !input elevationnight
   lightcommandtopic: "{{ 'hasp/' ~ haspname ~ '/brightness/set' }}"
-    
+
 trigger:
   - platform: state
     entity_id: sun.sun
     attribute: elevation
   - platform: state
     entity_id: !input lightgroup
-    to: "off"
+    to: 'off'
 
 condition:
   - condition: template
     value_template: "{{ is_state(haspsensor, 'ON') }}"
   - condition: state
     entity_id: !input lightgroup
-    state: "off"
+    state: 'off'
+#  - condition: template
+#    value_template: "{{ state_attr('sun.sun', 'elevation') | round(default=90) <= elevationday }}"
+#  - condition: template
+#    value_template: "{{ state_attr('sun.sun', 'elevation') | round(default=-90) >= elevationnight }}"
 
 action:
   - choose:

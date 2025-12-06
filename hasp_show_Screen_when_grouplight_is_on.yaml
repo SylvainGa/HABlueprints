@@ -2,7 +2,7 @@ blueprint:
   name: "HASPone Show the screen when a group of light is on"
   description: |
 
-    ## Blueprint Version: `1.05.00`
+    ## Blueprint Version: `1.06.00`
 
     # Description
 
@@ -30,11 +30,11 @@ blueprint:
           unit_of_measurement: percent
     lightgroup:
       name: "Group of lights to monitor"
-      description: "Group of lights to monitor for activity. If the group is on, this automation is triggered"
+      description: "Group of lights to monitor for activity. If the group is on, this automation is triggered."
       selector:
         entity:
           domain:
-            - group
+          - group
 
 mode: parallel
 max_exceeded: silent
@@ -68,7 +68,7 @@ trigger_variables:
 trigger:
   - platform: state
     entity_id: !input lightgroup
-    to: "on"
+    to: 'on'
 
 condition:
   - condition: template
@@ -77,5 +77,5 @@ condition:
 action:
   - service: mqtt.publish
     data:
-      topic: "{{lightcommandtopic}}"
-      payload: "{{brightvalue}}"
+      topic: '{{lightcommandtopic}}'
+      payload: '{{brightvalue}}'
