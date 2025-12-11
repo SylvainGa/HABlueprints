@@ -35,7 +35,7 @@ blueprint:
         entity:
           domain:
           - group
-
+  source_url: https://github.com/SylvainGa/HABlueprints/blob/main/hasp_show_Screen_when_grouplight_is_on.yaml
 mode: parallel
 max_exceeded: silent
 
