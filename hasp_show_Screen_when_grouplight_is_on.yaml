@@ -65,8 +65,8 @@ trigger_variables:
       {%- endif -%}
     {%- endfor -%}
 
-trigger:
-  - platform: state
+triggers:
+  - trigger: state
     entity_id: !input lightgroup
     to: 'on'
 

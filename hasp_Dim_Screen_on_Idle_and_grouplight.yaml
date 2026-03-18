@@ -89,10 +89,10 @@ trigger_variables:
     {%- endfor -%}
   jsontopic: '{{ "hasp/" ~ haspname ~ "/state/json" }}'
 
-trigger:
-  - platform: mqtt
+triggers:
+  - trigger: mqtt
     topic: "{{jsontopic}}"
-  - platform: state
+  - trigger: state
     entity_id: !input lightgroup
     to: 'off'
 

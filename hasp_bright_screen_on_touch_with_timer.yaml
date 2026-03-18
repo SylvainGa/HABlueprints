@@ -61,7 +61,7 @@ variables:
   new_brightness: '{{(brightness * 255 / 100)|int}}'
   idletime: !input idletime
   lightcommandtopic: '{{ "hasp/" ~ haspname ~ "/brightness/set" }}'
-  old_brightness: '{{ state_attr("light." ~ haspname ~ "_backlight", "brightness")|int }}'
+  old_brightness: '{{ state_attr("light." ~ haspname ~ "_backlight", "brightness")|int(0) }}'
 
 trigger_variables:
   haspdevice: !input haspdevice
@@ -79,10 +79,10 @@ trigger_variables:
     {%- endfor -%}
   jsontopic: '{{ "hasp/" ~ haspname ~ "/state/json" }}'
 
-trigger:
-  - platform: mqtt
+triggers:
+  - trigger: mqtt
     topic: "{{jsontopic}}"
-# - platform: state
+# - trigger: state
 #   entity_id: !input lightgroup
 #   to: 'off'
 
